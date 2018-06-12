@@ -1,0 +1,54 @@
+Course Project: Shiny Application and Reproducible Pitch
+========================================================
+author: Dashess
+date: 12-06-2018
+autosize: true
+
+Course Project
+========================================================
+Course Project of “Developing data products” in the “Data Science specialization” on Coursera.org
+
+This peer assessed assignment has two parts.
+
+- First, a shiny application that is deployed on Rstudio's servers.
+- Second a pitch presentation in Slidify or Rstudio Presenter about your application.
+
+Shiny Application: Dataset
+========================================================
+
+This application uses the data set collected and used by Sir Francis Galton in 1885 to study the relationship between parent's height and their childrens. The midparent's height is an average of the fathers height and 1.08 times the mother's (UsingR Description). The dataset is in inches, the data was multiplied by 2.54 for use in centimeters.Some information about the dataset:
+```{r, echo=FALSE}
+library(UsingR)
+galton$child <- galton$child * 2.54
+galton$parent <- galton$parent * 2.54
+```
+
+```{r}
+summary(galton)
+```
+
+Shiny Application: Model
+========================================================
+
+A linear model is fitted to predict the height of your child, in centimeters, based on your "midparent" height. This is a plot of the data and with the regression line shown in blue (with its 95% confidence interval).
+```{r, echo=FALSE}
+fit <- lm(child ~ parent, data = galton)
+pred <- predict(fit, data.frame(parent = 174))
+plot <- ggplot(data = galton, aes(x = parent, y = child)) +
+                                geom_point() +
+                                geom_smooth(method = "lm") +
+                                geom_vline(xintercept = 174, color = "red")+
+                                geom_hline(yintercept = pred, color = "green") +
+                                xlab("Parent Height") + ylab("Child Height")
+```
+```{r, echo=FALSE}
+plot
+```
+
+
+Shiny Application
+========================================================
+
+The application can be found in https://dashess.shinyapps.io/shiny_app_height/
+
+The source code is hosted in the following link https://github.com/dashess/shiny_app_height/
